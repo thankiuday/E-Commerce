@@ -35,10 +35,15 @@ const setCookies = (res, accessToken, refreshToken) => {
 };
 
 export const signup = async (req, res) => {
-	const { email, password, name } = req.body;
+	const { name,email, password } = req.body;
+	console.log(req.body);
 	try {
 		const userExists = await User.findOne({ email });
 
+		if (typeof name !== "string") {
+			return res.status(400).json({ error: "Invalid name format" });
+			console.log("Invalid name format");
+		  }
 		if (userExists) {
 			return res.status(400).json({ message: "User already exists" });
 		}

@@ -8,7 +8,7 @@ const router = express.Router();
 // getCoupon route
 router.get('/', protectRoute,getCoupon);
 // validating the coupon route
-router.get('/validate', protectRoute,validateCoupon);
+router.post('/validate', protectRoute,validateCoupon);
 
 // exporting the router
 export default router;

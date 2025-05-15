@@ -20,7 +20,7 @@ export const validateCoupon = async (req, res) => {
             return res.status(400).json({message: "Invalid  coupon code"});
         }
         // if coupon is expired
-        if(coupon.expiry < new Date()){
+        if(coupon.expirationDate < new Date()){
             coupon.isActive = false;
             await coupon.save();
             return res.status(400).json({message: "Coupon is expired"});
@@ -29,7 +29,7 @@ export const validateCoupon = async (req, res) => {
         res.json(
             {message: "Coupon is valid",
             code: coupon.code,
-            discount: coupon.discount,
+            discount: coupon.discountPercentage,
             }
         );
 

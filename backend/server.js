@@ -1,5 +1,7 @@
 // importing express using es6 import syntax
 import express from 'express';
+ import path from 'path';
+
 
 // importing MongoDB connection
 import {connectDB} from './lib/db.js';
@@ -34,7 +36,7 @@ dotenv.config();
 const app = express();
 
 // using express json middleware to parse the body of the request
-app.use(express.json());
+app.use(express.json({limit:"10mb"}));
 
 // using body parser
 app.use(bodyParser.json()); 
@@ -43,15 +45,25 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // setting up the port
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
+
+const __dirname = path.resolve();
 
 // setting up the route
 app.use("/api/auth",authRoutes);
-app.use("/api/product",productRoutes);
+app.use("/api/products",productRoutes);
 app.use("/api/cart",cartRoutes);
 app.use("/api/coupons",coupenRoutes);
 app.use("/api/payments",paymentRoute);
 app.use("/api/analytics", analyticsRoutes);
+
+if(process.env.NODE_ENV === "production"){
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+}
 // listening to the port
 app.listen(PORT, (req, res) => {
   console.log('Server is running on http://localhost:'+PORT);
