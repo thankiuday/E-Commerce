@@ -13,7 +13,6 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
     login(email, password)
     toast.success("Logged in successfully");
   };
